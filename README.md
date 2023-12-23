@@ -20,7 +20,6 @@
 ### Links
 - You must follow the [Installation Guide](INSTALL.md)
 - You must have the [API](https://api-custodia.custodia-workspace.dev) and the [WebUI](https://custodia.custodia-workspace.dev)
-- You can test the API from [api.http](api.http)
 - You have documentation of API routes on [/docs](https://api-custodia.custodia-workspace.dev/docs)
 
 
