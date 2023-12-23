@@ -1,0 +1,138 @@
+x-source-files: &source-files
+  - ./.editorconfig:/app/.editorconfig
+  - ./.eslintignore:/app/.eslintignore
+  - ./.eslintrc.yaml:/app/.eslintrc.yaml
+  - ./apps/:/app/apps/
+  - ./libs/:/app/libs/
+  - ./node_modules/:/app/node_modules/
+  - ./nx.json:/app/nx.json
+  - ./package.json:/app/package.json
+  - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
+  - ./tools/:/app/tools/
+  - ./tsconfig.base.json:/app/tsconfig.base.json
+  - ./babel.config.json:/app/babel.config.json
+networks:
+  front: 
+    name: custodia-front
+  databases:
+volumes:
+  postgres-data:
+services:
+  # Infrastructure
+  traefik:
+    image: traefik:2.8
+    restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      front:
+        aliases:
+          - custodia.custodia-workspace.dev
+          - api-custodia.custodia-workspace.dev
+    volumes:
+      - ./docker/config/traefik:/etc/traefik:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.rule=Host(`custodia-workspace.dev`)
+      - traefik.http.routers.dashboard.tls=true
+      - traefik.http.routers.dashboard.service=api@internal
+  postgres:
+    image: postgres:15-alpine
+    restart: on-failure
+    ports:
+      - 5432:5432
+    networks:
+      - databases
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: secret
+
+
+  custodia-api:
+    # # # # DEV
+    image: custodia-workspace-dev
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile
+      context: .
+    working_dir: /app
+    command: pnpm exec nx serve custodia-api
+    volumes: *source-files
+    # # # # 
+
+    # # # # PROD
+    # image: registry.digitalocean.com/custodia-registry/api
+    # build:
+    #   dockerfile: docker/node.dockerfile
+    #   context: .
+    #   args: 
+    #     PROJECT: custodia-api
+    # # # # 
+
+    networks:
+      - databases
+      - front
+    depends_on:
+      - postgres
+      - traefik
+    expose:
+      - 8080
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      ENVIRONMENT: development
+      LOGGER_LEVEL: info
+      SERVER_PORT: 8080
+      SERVER_CORS: https://custodia.custodia-workspace.dev
+      DB_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: secret
+      DB_DATABASE: custodia
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.custodia-api.rule=Host(`api-custodia.custodia-workspace.dev`)
+      - traefik.http.routers.custodia-api.tls=true
+      - traefik.http.services.custodia-api.loadbalancer.server.port=8080
+
+  custodia-webui:
+    # # # # DEV
+    image: custodia-workspace-dev
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    working_dir: /app
+    command: pnpm exec nx serve custodia-webui
+    volumes: *source-files
+    # # # # 
+
+    # # # # PROD
+    # expose: 
+    #  - 3000
+    # image: registry.digitalocean.com/custodia-registry/webui
+    # build:
+    #   dockerfile: docker/next.dockerfile
+    #   context: .
+    #   args:
+    #     PROJECT: custodia-webui
+    #     NEXT_PUBLIC_API_URL: https://custodia-api-dq6uh.ondigitalocean.app/
+    # # # #
+
+    expose:
+      - 4200
+    restart: on-failure
+    networks:
+      - front
+    depends_on:
+      - custodia-api
+      - traefik
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      VITE_API_URL: api-custodia.custodia-workspace.dev
+      
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.custodia-webui.rule=Host(`custodia.custodia-workspace.dev`)
+      - traefik.http.routers.custodia-webui.tls=true

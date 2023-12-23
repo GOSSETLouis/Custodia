@@ -1,0 +1,9 @@
+{
+  "name": "@apps/custodia",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0"
+  }
+}

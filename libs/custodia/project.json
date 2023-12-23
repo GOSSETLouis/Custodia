@@ -1,0 +1,26 @@
+{
+  "name": "custodia",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/custodia/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/custodia",
+        "main": "libs/custodia/src/index.ts",
+        "tsConfig": "libs/custodia/tsconfig.lib.json",
+        "assets": ["libs/custodia/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/custodia/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

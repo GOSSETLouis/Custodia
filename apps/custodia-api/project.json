@@ -1,0 +1,80 @@
+{
+  "name": "custodia-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/custodia-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "additionalEntryPoints": [
+          {
+            "entryName": "migrate",
+            "entryPath": "apps/custodia-api/src/scripts/migrate.ts"
+          },
+          {
+            "entryName": "wipe",
+            "entryPath": "apps/custodia-api/src/scripts/wipe.ts"
+          }
+        ],
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/custodia-api",
+        "main": "apps/custodia-api/src/main.ts",
+        "tsConfig": "apps/custodia-api/tsconfig.app.json",
+        "assets": ["apps/custodia-api/src/assets"],
+        "webpackConfig": "apps/custodia-api/webpack.config.js"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "custodia-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "custodia-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/custodia-api/src/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/custodia-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -P tsconfig.app.json -r tsconfig-paths/register src/scripts/migrate.ts",
+        "cwd": "apps/custodia-api"
+      }
+    },
+
+    "wipe": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node -P tsconfig.app.json -r tsconfig-paths/register src/scripts/wipe.ts",
+        "cwd": "apps/custodia-api"
+      }
+    }
+  },
+  "tags": []
+}
