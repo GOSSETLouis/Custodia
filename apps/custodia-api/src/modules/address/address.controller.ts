@@ -3,11 +3,11 @@ import { ApiResponse } from "@nestjs/swagger";
 
 import { AddressService } from "./address.service";
 import { Readable } from "node:stream";
-import { AddressDto, CreateAddressDto, type ListResult } from "@apps/custodia";
 import "multer";
 import { File } from "../../utils/file.decorator";
 import { UploadGuard } from "../upload/upload.guard";
 import type { MultipartFileCustom } from "@fastify/multipart";
+import { AddressDto, type CreateAddressDto, type ListResult } from "@apps/custodia";
 
 export type CustomMultipartFile = MultipartFileCustom;
 @Controller("/address")

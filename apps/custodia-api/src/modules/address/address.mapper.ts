@@ -8,7 +8,7 @@ import type { Stream } from "node:stream";
 import { AddressEntity } from "./address.entity";
 
 interface RowObjectType {
-  [key: string]: string
+  [key: string]: string;
 }
 @Injectable()
 export class AddressMapper {
@@ -47,7 +47,11 @@ export class AddressMapper {
         // get values from row
         row.eachCell((cell) => {
           const values = cell.value;
-          if (values) {
+          if (values !== null && values !== undefined) {
+            if (typeof values === "string") {
+              rowValues.push(values);
+            }
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             rowValues.push(values.toString());
           }
         });
@@ -60,7 +64,7 @@ export class AddressMapper {
         // table data
         else {
           // create object with the titles and the row values (if any)
-          let rowObject: RowObjectType = {};
+          const rowObject: RowObjectType = {};
           for (const [index, title] of excelTitles.entries()) {
             const value = rowValues[index] ?? "";
             rowObject[title] = value;

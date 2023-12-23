@@ -7,7 +7,7 @@
     "exactOptionalPropertyTypes": false,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "verbatimModuleSyntax": false,
+    "importsNotUsedAsValues": "error",
     "incremental": false,
     "isolatedModules": true,
     "lib": ["ES2022"],
