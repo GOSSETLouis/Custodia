@@ -14,7 +14,7 @@ export class AddressEntity {
   @Property()
   public name: string;
 
-  @Property({ unique: true })
+  @Property()
   public adresse: string;
 
   @Property()
