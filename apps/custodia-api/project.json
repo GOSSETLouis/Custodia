@@ -63,7 +63,7 @@
     "migrate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "ts-node -P tsconfig.app.json -r tsconfig-paths/register src/scripts/migrate.ts",
+        "command": "ts-node --files -P tsconfig.app.json -r tsconfig-paths/register src/scripts/migrate.ts",
         "cwd": "apps/custodia-api"
       }
     },
@@ -71,7 +71,7 @@
     "wipe": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "ts-node -P tsconfig.app.json -r tsconfig-paths/register src/scripts/wipe.ts",
+        "command": "ts-node --files -P tsconfig.app.json -r tsconfig-paths/register src/scripts/wipe.ts",
         "cwd": "apps/custodia-api"
       }
     }

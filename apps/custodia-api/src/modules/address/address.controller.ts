@@ -1,15 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from "@nestjs/common";
 import { ApiResponse } from "@nestjs/swagger";
 
 import { AddressService } from "./address.service";
-import { Readable } from "node:stream";
 import "multer";
-import { File } from "../../utils/file.decorator";
-import { UploadGuard } from "../upload/upload.guard";
 import type { MultipartFileCustom } from "@fastify/multipart";
 import { AddressDto, type CreateAddressDto, type ListResult } from "@apps/custodia";
+import type { FastifyReply, FastifyRequest } from "fastify";
 
 export type CustomMultipartFile = MultipartFileCustom;
+export type MyRequest = FastifyRequest;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MyResponse = FastifyReply<any>;
 @Controller("/address")
 export class AddressController {
   private readonly addressService: AddressService;
@@ -36,12 +37,10 @@ export class AddressController {
   }
 
   @Post()
-  @UseGuards(UploadGuard)
-  public async uploadFile(
-    @File()
-    file: CustomMultipartFile
-  ) {
-    return await this.addressService.create(Readable.from(await file.toBuffer()));
+
+  // @UseGuards(UploadGuard)
+  public async uploadFile(@Req() req: MyRequest) {
+    return await this.addressService.create(req);
   }
 
   @Patch(":addressId")

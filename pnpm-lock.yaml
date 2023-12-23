@@ -104,6 +104,7 @@ specifiers:
   eslint-plugin-unicorn: 44.0.2
   eslint-plugin-unused-imports: 2.0.0
   exceljs: ^4.3.0
+  fastify: ^4.25.1
   jest: 28.1.1
   jest-environment-jsdom: 28.1.1
   jotai: 2.1.0
@@ -207,6 +208,7 @@ dependencies:
   echarts-for-react: 3.0.2_echarts@5.4.2+react@18.2.0
   env-var: 7.3.0
   exceljs: 4.4.0
+  fastify: 4.25.1
   jotai: 2.1.0_react@18.2.0
   leaflet: 1.9.4
   localforage: 1.10.0

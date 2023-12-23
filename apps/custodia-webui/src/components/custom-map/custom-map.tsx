@@ -5,7 +5,6 @@ import { addressContext } from "../../context/address.context";
 
 export function CustomMap(): JSX.Element {
   const { address } = useContext(addressContext);
-  console.log(address)
   return (
     <MapContainer center={[48.006_11, 0.199_556]} zoom={12} scrollWheelZoom={false}>
       <TileLayer

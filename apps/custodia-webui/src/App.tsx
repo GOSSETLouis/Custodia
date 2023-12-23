@@ -3,7 +3,6 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./Router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCheckSquare, faCoffee } from "@fortawesome/free-solid-svg-icons";
-import { PermanentDrawerLeft } from "./components/permanentDrawer";
 import "./App.css";
 
 library.add(faCheckSquare, faCoffee);
@@ -22,9 +21,7 @@ export const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <PermanentDrawerLeft>
-        <RouterProvider router={router} />
-      </PermanentDrawerLeft>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 }

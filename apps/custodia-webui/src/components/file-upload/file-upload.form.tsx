@@ -4,8 +4,9 @@ import type { ChangeEvent } from "react";
 export interface FileUploadFormProperties {
   handleFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
   submit: () => void;
+  fileTitle: string;
 }
-export function FileUploadForm({ handleFileChange, submit }: FileUploadFormProperties) {
+export function FileUploadForm({ handleFileChange, submit, fileTitle }: FileUploadFormProperties) {
   return (
     <form>
       <TextField
@@ -14,6 +15,8 @@ export function FileUploadForm({ handleFileChange, submit }: FileUploadFormPrope
         label="Ajouter un fichier"
         type="file"
         onChange={handleFileChange}
+        placeholder={fileTitle}
+        InputProps={{ name: fileTitle }}
       ></TextField>
       <Button
         onClick={(event) => {

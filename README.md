@@ -59,3 +59,8 @@ Stop services
 ```bash
 docker compose down
 ```
+
+### Test
+- You can try the xlsx file located in this folder : Custodia/tools/files/excel/
+
+It will give you the excel format recommender to use the application

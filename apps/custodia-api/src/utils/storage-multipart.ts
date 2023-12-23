@@ -1,4 +1,3 @@
-
 declare module "@fastify/multipart" {
   interface FastifyRequest {
     incomingFile: {

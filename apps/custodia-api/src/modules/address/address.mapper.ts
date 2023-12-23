@@ -48,9 +48,6 @@ export class AddressMapper {
         row.eachCell((cell) => {
           const values = cell.value;
           if (values !== null && values !== undefined) {
-            if (typeof values === "string") {
-              rowValues.push(values);
-            }
             // eslint-disable-next-line @typescript-eslint/no-base-to-string
             rowValues.push(values.toString());
           }

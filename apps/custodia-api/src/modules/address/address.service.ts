@@ -1,10 +1,11 @@
 import { MikroORM } from "@mikro-orm/core";
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 
 import { AddressMapper } from "./address.mapper";
 import { AddressEntity } from "./address.entity";
 import type { AddressDto, CreateAddressDto, ListResult } from "@apps/custodia";
-import type { Stream } from "node:stream";
+import { Readable, type Stream } from "node:stream";
+import type { MyRequest } from "./address.controller";
 
 @Injectable()
 export class AddressService {
@@ -20,7 +21,9 @@ export class AddressService {
   public async list(name: string): Promise<ListResult<AddressDto>> {
     const em = this.orm.em.fork();
     const repository = em.getRepository(AddressEntity);
-    const items = await repository.find({ name });
+    const items = await repository.find({
+      name,
+    });
     const total = await repository.count(name);
     const itemsDto = [];
     for await (const item of items) {
@@ -56,7 +59,7 @@ export class AddressService {
     return this.mapper.entityToDto(item);
   }
 
-  public async create(file: Stream): Promise<AddressDto[]> {
+  public async created(file: Stream): Promise<AddressDto[]> {
     const addresses: AddressDto[] = [];
     const em = this.orm.em.fork();
     const items = await this.mapper.createDtoToEntity(file);
@@ -80,5 +83,17 @@ export class AddressService {
     const item = await repository.findOneOrFail(id);
 
     await repository.removeAndFlush(item);
+  }
+
+  public async create(req: MyRequest): Promise<AddressDto[]> {
+    if (!req.isMultipart()) {
+      throw new BadRequestException("multipart expected");
+    }
+    const data = await req.file();
+    if (data === undefined) {
+      throw new BadRequestException("file expected");
+    }
+    const file = data.toBuffer();
+    return await this.created(Readable.from(await file));
   }
 }

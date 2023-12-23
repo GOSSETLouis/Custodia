@@ -7,7 +7,8 @@ import Toolbar from "@mui/material/Toolbar";
 import type { ReactNode } from "react";
 import { FileUpload } from "./file-upload/file-upload";
 import { Link } from "./Link";
-import { ReactSVG } from "react-svg";
+import { useLocation } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 const drawerWidth = 240;
 export interface PermanentDrawerLeftProperties {
@@ -15,6 +16,7 @@ export interface PermanentDrawerLeftProperties {
 }
 
 export function PermanentDrawerLeft({ children }: PermanentDrawerLeftProperties) {
+  const location = useLocation();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -39,21 +41,17 @@ export function PermanentDrawerLeft({ children }: PermanentDrawerLeftProperties)
         anchor="left"
       >
         <Toolbar>
-          <Box sx={{ maxWidth: "120px", height: "45px" }}>
-            <ReactSVG
-              className="wrapper-svg-logo"
-              beforeInjection={(svg) => {
-                // eslint-disable-next-line max-len
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                svg.classList.add("svg-logo");
-              }}
-              src="/img/Custodia.svg"
-            />
+          <Box
+            sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}
+          >
+            <Typography component="p" sx={{ fontWeight: "bold" }}>
+              Custodia
+            </Typography>
           </Box>
         </Toolbar>
         <Divider />
         <Link name={"Map"} path={"/"} />
-        <Link name={"Planing"} path={"/planing"} />
+        <Link name={"Info"} path={"/about"} />
         <Box sx={{ padding: "6px", marginTop: "10px" }}>
           {location.pathname === "/" ? <FileUpload /> : <Box></Box>}
         </Box>
