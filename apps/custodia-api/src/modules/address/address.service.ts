@@ -93,6 +93,9 @@ export class AddressService {
     if (data === undefined) {
       throw new BadRequestException("file expected");
     }
+    if (data.mimetype !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+      throw new BadRequestException("Le fichier doit être au format .xlsx");
+    }
     const file = data.toBuffer();
     return await this.created(Readable.from(await file));
   }
